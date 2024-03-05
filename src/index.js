@@ -15,7 +15,7 @@ const client = new Client({
     ]
 });
 
-//event handler
+//call event handler
 eventHandler(client);
 
 //login bot
