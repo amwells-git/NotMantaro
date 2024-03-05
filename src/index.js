@@ -26,10 +26,10 @@ const client = new Client({
 
         //call event handler
         eventHandler(client);
+
+        //login bot
+        client.login(process.env.TOKEN);
     } catch (error) {
         console.log(error);
     }
 })();
-
-//login bot
-client.login(process.env.TOKEN);
