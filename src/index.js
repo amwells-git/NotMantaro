@@ -27,7 +27,7 @@ const client = new Client({
         //call event handler
         eventHandler(client);
 
-        //login bot
+        //login bot to discord
         client.login(process.env.TOKEN);
     } catch (error) {
         console.log(error);
