@@ -1,7 +1,6 @@
 //uncomment if you need options
 const { ApplicationCommandOptionType, EmbedBuilder } = require('discord.js');//some games use the embed builder
 //import randomPokemonName function
-const randomPokemonName = require('../../utils/game/pokemon/randomPokemonName');
 const pokemon = require('../../utils/game/pokemon/pokemon')
 
 module.exports = {
