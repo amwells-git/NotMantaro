@@ -26,11 +26,14 @@ module.exports = {
 
     callback: async (client, interaction) => {
         await interaction.deferReply();
-
+        //findout what game they wish to play
         let game = interaction.options.get('game').value;
 
-        console.log(game)
+        //make sure no one else can run a game
 
+
+
+        //start game's related controller
         if (game === 'pokemon_game') {
             pokemon(client, interaction);
         }
