@@ -30,9 +30,13 @@ module.exports = {
         try {
             await interaction.deferReply();
 
-            //see if missed daily & set local streak
+            //see if missed daily & set local streak, also preset dailySaved
+            let dailySaved = false;
             let missedDaily = false;
             let streak = 0;
+            //local daily savers for later loops, and allow wider use of timeBetween
+            let l_dailySavers = 0;
+            let timeBetween;
 
             //create query
             let user = await User.findOne({
@@ -45,10 +49,10 @@ module.exports = {
                 const currentDate = new Date()//.toDateString();
 
                 //calculate milliseconds
-                const timeBetween = currentDate.getTime() - lastDailyDate.getTime();
+                timeBetween = currentDate.getTime() - lastDailyDate.getTime();
                 //if still in the original 24-hour period, tell next daily collection time then return
                 if (timeBetween < MilliSecsDay){
-                    //calcualte time till next allowed claim
+                    //calculate time till next allowed claim
                     const remainingTime = timeFromMilliseconds(MilliSecsDay - timeBetween);
 
                     //tell user how long they have to wait to claim next daily
@@ -70,9 +74,18 @@ module.exports = {
                 });
             }
 
+            //if missed daily, check for daily savers
+            if (missedDaily) {
+                if (user.dailySavers >= 1) {
+                    dailySaved = true;
+                    missedDaily = false;
+                    user.dailySavers -= 1;
+                }
+            }
+
             //calculate daily currency and streak
             if (missedDaily){//if forgot to claim daily on time
-                //reset streak
+                //reset streak & saverStreak
                 streak = user.dailyStreak;
                 user.dailyStreak = 1;
 
@@ -100,22 +113,62 @@ module.exports = {
                 //add received currency
                 user.balance += calculatedCurrency.totalCurrency;
 
+                //update dailySaver & set receivedSaver
+                let receivedSaver = false;
+                if (user.dailyStreak % 50 === 0 &&  !dailySaved) {//dont use and give a daily saver
+                    user.dailySavers +=1;
+                    receivedSaver = true;
+                }
+
                 //update daily collection date
                 user.lastDailyCollected = new Date();
 
                 //save updated information to db
                 await user.save();
 
-                if (calculatedCurrency.streakDays >= 5) {
-                    interaction.editReply(`:white_check_mark: You got **$${calculatedCurrency.totalCurrency}** daily credits.
-                    \nStreak up! Current streak: \`${streak}x\`\n You won a bonus of $${calculatedCurrency.bonusCurrency} for claiming your daily for 5 days in a row or more! (Included in money shown!)`);
-                } else {
-                    if (streak <= 1){
+                //determine if they got a new dailySaver or had to use on or had neither
+                if (dailySaved){//used a daily saver
+                    if (calculatedCurrency.streakDays >= 5) {
                         interaction.editReply(`:white_check_mark: You got **$${calculatedCurrency.totalCurrency}** daily credits.
-                    \nStreak up! Current streak: \`${streak}x\``)
+                        \nStreak up! Current streak: \`${streak}x\`\nYour \'Magical Watches\' saved your streak! You used \'1\' of them to extend your streaks survival time to 2x you have \'1\' of them remaining!
+                        You won a bonus of $${calculatedCurrency.bonusCurrency} for claiming your daily for 5 days in a row or more! (Included in money shown!)`);
                     } else {
+                        if (streak <= 1){
+                            interaction.editReply(`:white_check_mark: You got **$${calculatedCurrency.totalCurrency}** daily credits.
+                            \nStreak up! Current streak: \`${streak}x\`\nYour \'Magical Watches\' saved your streak! You used \'1\' of them to extend your streaks survival time to 2x you have \'1\' of them remaining!`)
+                        } else {
+                            interaction.editReply(`:white_check_mark: You got **$${calculatedCurrency.totalCurrency}** daily credits.
+                            \nStreak up! Current streak: \`${streak}x\`\nYour \'Magical Watches\' saved your streak! You used \'1\' of them to extend your streaks survival time to 2x you have \'1\' of them remaining!
+                            You won a bonus of $${calculatedCurrency.bonusCurrency} for claiming your daily for ${calculatedCurrency.streakDays} days in a row! (Included in money shown!)`);
+                        }
+                    }
+                } else if (receivedSaver){//got a dailySaver
+                    if (calculatedCurrency.streakDays >= 5) {
                         interaction.editReply(`:white_check_mark: You got **$${calculatedCurrency.totalCurrency}** daily credits.
+                        \nStreak up! Current streak: \`${streak}x\`\nYou won a \'Magic Watch\' because your daily streak is a multiple of 50! Enjoy.
+                        You won a bonus of $${calculatedCurrency.bonusCurrency} for claiming your daily for 5 days in a row or more! (Included in money shown!)`);
+                    } else {
+                        if (streak <= 1){
+                            interaction.editReply(`:white_check_mark: You got **$${calculatedCurrency.totalCurrency}** daily credits.
+                            \nStreak up! Current streak: \`${streak}x\`\nYou won a \'Magic Watch\' because your daily streak is a multiple of 50! Enjoy.`)
+                        } else {
+                            interaction.editReply(`:white_check_mark: You got **$${calculatedCurrency.totalCurrency}** daily credits.
+                            \nStreak up! Current streak: \`${streak}x\`\nYou won a \'Magic Watch\' because your daily streak is a multiple of 50! Enjoy.
+                            You won a bonus of $${calculatedCurrency.bonusCurrency} for claiming your daily for ${calculatedCurrency.streakDays} days in a row! (Included in money shown!)`);
+                        }
+                    }
+                } else {//didn't use or recieve a daily saver
+                    if (calculatedCurrency.streakDays >= 5) {
+                        interaction.editReply(`:white_check_mark: You got **$${calculatedCurrency.totalCurrency}** daily credits.
+                    \nStreak up! Current streak: \`${streak}x\`\n You won a bonus of $${calculatedCurrency.bonusCurrency} for claiming your daily for 5 days in a row or more! (Included in money shown!)`);
+                    } else {
+                        if (streak <= 1){
+                            interaction.editReply(`:white_check_mark: You got **$${calculatedCurrency.totalCurrency}** daily credits.
+                    \nStreak up! Current streak: \`${streak}x\``)
+                        } else {
+                            interaction.editReply(`:white_check_mark: You got **$${calculatedCurrency.totalCurrency}** daily credits.
                     \nStreak up! Current streak: \`${streak}x\`\n You won a bonus of $${calculatedCurrency.bonusCurrency} for claiming your daily for ${calculatedCurrency.streakDays} days in a row! (Included in money shown!)`);
+                        }
                     }
                 }
             }

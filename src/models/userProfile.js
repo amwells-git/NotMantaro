@@ -16,8 +16,12 @@ const userProfileSchema = new Schema({
     },
     lastDailyCollected: {
         type: Date,
-        required: true
-    }
+        required: true,
+    },
+    dailySavers: {
+        type: Number,
+        default: 0,
+    },
 }, { timestamps: true });//auto create timestamps
 
 //export schema
