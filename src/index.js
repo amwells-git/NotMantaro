@@ -27,6 +27,11 @@ const client = new Client({
         //call event handler
         eventHandler(client);
 
+        //set check for /game command (when 0, /game command is allowed through, when greater than 0 doesn't allow command through)
+        //is currently only way in discord.js (that I know of) to have a cross file boolean, though If I find something else I will use it
+        //as of 1.1 build there is no need for Listeners from the client that I need
+        client.setMaxListeners(0);
+
         //login bot to discord
         client.login(process.env.TOKEN);
     } catch (error) {

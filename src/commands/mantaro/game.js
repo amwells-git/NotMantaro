@@ -1,5 +1,5 @@
 //uncomment if you need options
-const { ApplicationCommandOptionType, EmbedBuilder } = require('discord.js');//some games use the embed builder
+const { ApplicationCommandOptionType } = require('discord.js');
 //import randomPokemonName function
 const pokemon = require('../../utils/game/pokemon/pokemon')
 
@@ -29,8 +29,13 @@ module.exports = {
         //findout what game they wish to play
         let game = interaction.options.get('game').value;
 
-        //make sure no one else can run a game
-
+        //make sure no one else can run a /game while a game is running
+        if (client.getMaxListeners() > 0) {
+            interaction.editReply(`:x: Cannot start a new game lobby when there is a game currently running. (If this is an error, tell an admin to run \`/resetlobby\`)`);
+            return;
+        }
+        //set game lobby check
+        client.setMaxListeners(1);
 
 
         //start game's related controller
