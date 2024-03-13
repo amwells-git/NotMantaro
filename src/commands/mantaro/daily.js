@@ -67,7 +67,7 @@ module.exports = {
                 }
                 //if inbetween a day and two days (Past original 24-hours but not past 48-hours), allow claiming of dailies
             }
-            //if user not found, create a new one!
+            //if user not found, create a new one!!
             else {
                 missedDaily = false;
                 user = new User({
