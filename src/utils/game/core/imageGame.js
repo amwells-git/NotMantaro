@@ -50,7 +50,7 @@ module.exports = (client, interaction, correctAnswer) => {
         } else if (noAttempts) {
             interaction.followUp(`:x: Already used all attempts, ending game. Answer: ${correctAnswer}`);
         } else if (gotRight) {
-            interaction.followUp(`:mega: **${interaction.user.nickname}** just won $${0} credits by answering correctly!`)
+            interaction.followUp(`:mega: **${interaction.member.nickname}** just won $${0} credits by answering correctly!`)
         } else {
             interaction.followUp(`Apologies, I've Broken! Please try again!`);
         }
