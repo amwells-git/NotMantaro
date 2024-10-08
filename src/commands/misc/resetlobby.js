@@ -3,7 +3,7 @@
 
 module.exports = {
     name: 'resetlobby',
-    description: 'List Commands & How To Use Them',
+    description: 'Reset Game Lobby',
     // devOnly: Boolean,
     // testOnly: Boolean,
     // options: Object[],
