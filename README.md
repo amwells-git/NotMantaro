@@ -2,6 +2,7 @@
 
 This project was to revive the daily system implemented by the Montaro Discord Bot when it went End-of-Service on March 1st, 2024 for a personal Discord server.
 As I did not need the full capabilites of the original Montaro, I used Discord.js to develop a smaller bot that replicated the Montaro dailies system.
+I have also implemented the 'Guess That Pokémon' game from Montaro.
 
 ## Packages
 
@@ -23,6 +24,13 @@ After creating the .env, you should be able to run nodemon to get the bot up and
 ### ***Warning***
 
 *This bot is only designed to be run for a single Discord server*
+
+## Commands
+- /daily : Claims the user's daily
+- /game pokemon : Plays the 'Guess That Pokémon' game for the user
+- /help : List Commands
+- /ping : Returns bots response ping (used for lag detection)
+- /resetlobby : Resets the game lobby should an error occur
 
 ## Copyright Notice
 
