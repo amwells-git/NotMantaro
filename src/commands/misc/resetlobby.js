@@ -11,6 +11,6 @@ module.exports = {
 
     callback: (client, interaction) => {
         client.setMaxListeners(0);
-        interaction.reply(`If this doesn't fix the game lobby, the bot probably needs a reset. ~Alex`);
+        interaction.reply(`If this doesn't fix the game lobby, the bot probably needs a reset.`);
     }
 }
