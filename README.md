@@ -32,6 +32,17 @@ After creating the .env, you should be able to run nodemon to get the bot up and
 - /ping : Returns bots response ping (used for lag detection)
 - /resetlobby : Resets the game lobby should an error occur
 
-## Copyright Notice
+## Pokémon Copyright Notice
 
 The outline images of Pokémon used in this project are © Nintendo, Game Freak, and Creatures. Pokémon and all associated names, images, and trademarks are property of their respective owners. This project is a fan work and is not affiliated with, endorsed, or sponsored by Nintendo, Game Freak, or The Pokémon Company.
+
+## Montaro Copyright Notice
+Copyright (C) 2016 Kodehawa
+
+This program is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+
+See the GNU General Public License for more details. You should have received a copy of the GNU General Public License along with this program. If not, see http://www.gnu.org/licenses/
+
+The full license can be found here.
